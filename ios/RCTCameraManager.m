@@ -417,6 +417,22 @@ RCT_EXPORT_METHOD(hasFlash:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRej
     resolve(@(device.hasFlash));
 }
 
+RCT_EXPORT_METHOD(allowBackgroundAudio:(RCTPromiseResolveBlock)resolve
+                                reject:(__unused RCTPromiseRejectBlock)reject) {
+  self.session.automaticallyConfiguresApplicationAudioSession = NO;
+
+  NSError *error = nil;
+  AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+
+  BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions: (AVAudioSessionCategoryOptionDuckOthers | AVAudioSessionCategoryOptionDefaultToSpeaker) error:&error];
+
+  if (!success) {
+    reject(RCTErrorUnspecified, nil, RCTErrorWithMessage([error localizedDescription]));
+  } else {
+    resolve(@YES);
+  }
+}
+
 - (void)startSession {
 #if TARGET_IPHONE_SIMULATOR
   return;

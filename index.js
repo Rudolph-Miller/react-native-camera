@@ -257,6 +257,10 @@ export default class Camera extends Component {
     }
     return CameraManager.hasFlash();
   }
+
+  allowBackgroundAudio() {
+    return CameraManager.allowBackgroundAudio();
+  }
 }
 
 export const constants = Camera.constants;
